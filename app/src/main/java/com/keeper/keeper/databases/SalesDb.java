@@ -68,24 +68,44 @@ public class SalesDb extends SQLiteOpenHelper {
         db.execSQL(query);
     }
 
+
     /**
      * Inserts Transaction into SQLite DB
      */
     public void saveTransaction(PurchasedItem product) {
 
-            SQLiteDatabase database = this.getWritableDatabase();
-            ContentValues values = new ContentValues();
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
 
-            values.put("code","A001");
-            values.put("product",product.getProduct());
-            values.put("price", product.getPrice());
-            values.put("quantity",product.getQuantity());
-            values.put("purchase_date",product.getPurchase_date());
-            values.put("purchase_month",product.getPurchase_month());
-            values.put("raw_date",product.getRaw_date());
-            values.put("customer_id", product.getCustomer_id());
+        values.put("code","A001");
+        values.put("product",product.getProduct());
+        values.put("price", product.getPrice());
+        values.put("quantity",product.getQuantity());
+        values.put("purchase_date",product.getPurchase_date());
+        values.put("purchase_month",product.getPurchase_month());
+        values.put("raw_date",product.getRaw_date());
+        values.put("customer_id", product.getCustomer_id());
 
-            database.insert("sales", null, values);
+        database.insert("sales", null, values);
+    }
+
+    /**
+     * Inserts Transaction into SQLite DB
+     */
+    public void saveSummaryTransaction(PurchaseSummary product) {
+
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+
+        values.put("code",product.getCode());
+        values.put("total_price", product.getTotal_price());
+        values.put("purchase_date",product.getPurchase_date());
+        values.put("purchase_month",product.getPurchase_month());
+        values.put("raw_date",product.getRaw_date());
+        values.put("customer_id", product.getCustomer_id());
+
+        database.insert("salesSummary", null, values);
     }
 
     /**
@@ -126,7 +146,7 @@ public class SalesDb extends SQLiteOpenHelper {
         database.close();
         return data;
     }
-    
+
 
 
 }
