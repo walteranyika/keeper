@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.keeper.keeper.R;
 import com.keeper.keeper.adapters.SalesListAdapter;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 
 public class SalesFragment extends Fragment {
     TextView tvSalesCounter, tvSalesTotal;
+    TemporaryDb temporaryDb;
     public static final String TAG = "KEEPER";
     public interface OnShoppingBasketSelectedListener{
         void onShoppingBasketClicked();
@@ -36,7 +38,7 @@ public class SalesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sales_fragment, container, false);
         ListView listView = (ListView) view.findViewById(R.id.sales_list);
-        final TemporaryDb temporaryDb = new TemporaryDb(getActivity());
+        temporaryDb = new TemporaryDb(getActivity());
         tvSalesCounter = (TextView) view.findViewById(R.id.tvSalesCounter);
         tvSalesTotal = (TextView) view.findViewById(R.id.tvSalesTotals);
         LinearLayout layoutStocks = (LinearLayout) view.findViewById(R.id.layoutCounter);
@@ -61,8 +63,15 @@ public class SalesFragment extends Fragment {
         layoutStocks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                  OnShoppingBasketSelectedListener listener = (OnShoppingBasketSelectedListener) getActivity();
-                  listener.onShoppingBasketClicked();
+                if(temporaryDb.getProductsTotalCost()>0)
+                {
+                    OnShoppingBasketSelectedListener listener = (OnShoppingBasketSelectedListener) getActivity();
+                    listener.onShoppingBasketClicked();
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), "Cart is empty", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         return view;

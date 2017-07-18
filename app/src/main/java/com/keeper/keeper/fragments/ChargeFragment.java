@@ -53,6 +53,7 @@ public class ChargeFragment extends Fragment {
                 PurchaseSummary summary=new PurchaseSummary("A001",db.getProductsTotalCost(),date,month,raw_date,1);
                 sdb.saveSummaryTransaction(summary);
 
+                db.clearRecords();
 
                 textViewStatus.setText("Transaction Successfull");
                 textViewStatus.setScaleX(0);

@@ -34,6 +34,7 @@ public class SalesActivity extends AppCompatActivity implements SalesFragment.On
 
     @Override
     public void onShoppingBasketClicked() {
+
         ReceiptFragment receiptFragment = new ReceiptFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.placeHolderSales, receiptFragment, RECEIPT_FRAGMENT);
@@ -55,4 +56,5 @@ public class SalesActivity extends AppCompatActivity implements SalesFragment.On
             Log.d("FRAGMENT","NULL");
         }
     }
+
 }

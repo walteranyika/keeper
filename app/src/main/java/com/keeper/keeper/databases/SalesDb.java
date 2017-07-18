@@ -5,9 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import com.keeper.keeper.models.Product;
 import com.keeper.keeper.models.PurchaseSummary;
 import com.keeper.keeper.models.PurchasedItem;
 
@@ -20,13 +18,13 @@ import java.util.ArrayList;
 public class SalesDb extends SQLiteOpenHelper {
 
     public SalesDb(Context context) {
-        super(context, "sales_database.db", null, 1);
+        super(context, "sales.db", null, 2);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String  query = "CREATE TABLE sales" +
+        String  query = "CREATE TABLE IF NOT EXISTS sales" +
                 "(id INTEGER PRIMARY KEY, " +
                 "code TEXT, " +
                 "product TEXT, " +
@@ -37,7 +35,7 @@ public class SalesDb extends SQLiteOpenHelper {
                 "raw_date TEXT, " +
                 "customer_id INTEGER)";
 
-        String querySummary="CREATE TABLE salesSummary" +
+        String querySummary="CREATE TABLE IF NOT EXISTS salesSummary" +
                             "(id INTEGER PRIMARY KEY, " +
                             "code TEXT, " +
                             "total_price REAL, " +

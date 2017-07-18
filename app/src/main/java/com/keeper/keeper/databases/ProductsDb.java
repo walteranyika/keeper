@@ -19,23 +19,23 @@ public class ProductsDb extends SQLiteOpenHelper {
 
     //create a database called demo_database.db
     public ProductsDb(Context applicationcontext) {
-        super(applicationcontext, "tempos.db", null, 1);
+        super(applicationcontext, "products.db", null, 2);
     }
 
     //Creates Table
     @Override
     public void onCreate(SQLiteDatabase database) {
         String query;
-        query = "CREATE TABLE temporary(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER)";
+        query = "CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER)";
         database.execSQL(query);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int version_old, int current_version) {
         String sql;
-        sql = "DROP TABLE IF EXISTS temporary";
+        sql = "DROP TABLE IF EXISTS products";
         database.execSQL(sql);
-        database.execSQL("CREATE TABLE temporary(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER)");
+        database.execSQL("CREATE TABLE products(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER)");
         onCreate(database);
     }
 
@@ -56,7 +56,7 @@ public class ProductsDb extends SQLiteOpenHelper {
             values.put("price", product.getPrice());
             Log.d("PRICE", product.getTitle() + " : " + product.getPrice());
             values.put("quantity", 1);
-            database.insert("temporary", null, values);
+            database.insert("products", null, values);
             database.close();
         }
     }
@@ -64,12 +64,12 @@ public class ProductsDb extends SQLiteOpenHelper {
     /**
      * Get list of Product from SQLite DB as Array List of Products
      *
-     * @return
+     * @return ArrayList<Product>
      */
     public ArrayList<Product> getProducts() {
         ArrayList<Product> data;
-        data = new ArrayList<Product>();
-        String selectQuery = "SELECT  * FROM temporary";
+        data = new ArrayList<>();
+        String selectQuery = "SELECT  * FROM products";
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
@@ -90,7 +90,7 @@ public class ProductsDb extends SQLiteOpenHelper {
      */
     public int countItems() {
         int count = 0;
-        String sql = "SELECT  SUM(quantity) FROM temporary";
+        String sql = "SELECT  SUM(quantity) FROM products";
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(sql, null);
         if (cursor.moveToFirst()) {
@@ -103,11 +103,11 @@ public class ProductsDb extends SQLiteOpenHelper {
     /**
      * Delete A record Based on Its ID Number
      *
-     * @param code
+     * @param  code
      */
     public void deleteItem(int code) {
         SQLiteDatabase database = this.getWritableDatabase();
-        database.delete("temporary", "code=" + code, null);
+        database.delete("products", "code=" + code, null);
         database.close();
     }
 
@@ -116,7 +116,7 @@ public class ProductsDb extends SQLiteOpenHelper {
      */
     public void clearRecords() {
         SQLiteDatabase database = this.getWritableDatabase();
-        database.delete("temporary", null, null);
+        database.delete("products", null, null);
         database.close();
     }
 
@@ -128,7 +128,7 @@ public class ProductsDb extends SQLiteOpenHelper {
 
     public boolean checkIfExists(int code) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String selectQuery = "SELECT  * FROM temporary WHERE code=" + code;
+        String selectQuery = "SELECT  * FROM products WHERE code=" + code;
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             return true;
@@ -143,7 +143,7 @@ public class ProductsDb extends SQLiteOpenHelper {
     private void updateQuantity(int code) {
         SQLiteDatabase database = this.getWritableDatabase();
         int quantity = getProductQuantity(code) + 1;
-        String updateQuery = "UPDATE  temporary SET quantity=" + quantity + " WHERE code=" + code;
+        String updateQuery = "UPDATE  products SET quantity=" + quantity + " WHERE code=" + code;
         database.execSQL(updateQuery);
         database.close();
     }
@@ -155,7 +155,7 @@ public class ProductsDb extends SQLiteOpenHelper {
      */
     public void updateQuantity(int code, int quantity) {
         SQLiteDatabase database = this.getWritableDatabase();
-        String updateQuery = "UPDATE  temporary SET quantity=" + quantity + " WHERE code=" + code;
+        String updateQuery = "UPDATE  products SET quantity=" + quantity + " WHERE code=" + code;
         database.execSQL(updateQuery);
         database.close();
     }
@@ -167,7 +167,7 @@ public class ProductsDb extends SQLiteOpenHelper {
      */
     public int getProductQuantity(int code) {
 
-        String selectQuery = "SELECT  quantity FROM temporary WHERE code=" + code;
+        String selectQuery = "SELECT  quantity FROM products WHERE code=" + code;
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {

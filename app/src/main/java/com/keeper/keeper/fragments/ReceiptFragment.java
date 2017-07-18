@@ -29,6 +29,8 @@ public class ReceiptFragment extends Fragment {
     ArrayList<Product> data;
     TemporaryDb db;
     ReceiptListAdapter adapter;
+    TextView tvTotal;
+    TextView tvCounter;
 
     @Nullable
     @Override
@@ -36,8 +38,8 @@ public class ReceiptFragment extends Fragment {
         View view = inflater.inflate(R.layout.receipt_fragment, container, false);
         db= new TemporaryDb(getActivity());
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.layoutReceiptCounter);
-        TextView tvTotal= (TextView) view.findViewById(R.id.tvReceiptTotals);
-        TextView tvCounter= (TextView) view.findViewById(R.id.tvReceiptCounter);
+        tvTotal= (TextView) view.findViewById(R.id.tvReceiptTotals);
+        tvCounter= (TextView) view.findViewById(R.id.tvReceiptCounter);
         tvTotal.setText("KES "+db.getProductsTotalCost());
         tvCounter.setText(db.countItems()+" Items");
 
@@ -76,6 +78,8 @@ public class ReceiptFragment extends Fragment {
         data.addAll(items);
         Log.d("ITEMS","AF:"+data.size());
         adapter.notifyDataSetChanged();
+        tvTotal.setText("KES "+db.getProductsTotalCost());
+        tvCounter.setText(db.countItems()+" Items");
 
     }
 }

@@ -19,14 +19,14 @@ public class TemporaryDb extends SQLiteOpenHelper {
 
     //create a database called demo_database.db
     public TemporaryDb(Context applicationcontext) {
-        super(applicationcontext, "tempos.db", null, 1);
+        super(applicationcontext, "tempo.db", null, 2);
     }
 
     //Creates Table
     @Override
     public void onCreate(SQLiteDatabase database) {
         String query;
-        query = "CREATE TABLE temporary(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER)";
+        query = "CREATE TABLE IF NOT EXISTS temporary(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER)";
         database.execSQL(query);
     }
 
@@ -35,7 +35,7 @@ public class TemporaryDb extends SQLiteOpenHelper {
         String sql;
         sql = "DROP TABLE IF EXISTS temporary";
         database.execSQL(sql);
-        database.execSQL("CREATE TABLE temporary(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER)");
+        database.execSQL("CREATE TABLE IF NOT EXISTS temporary(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER)");
         onCreate(database);
     }
 
