@@ -10,6 +10,8 @@ public class Product {
     private double price;
     private int quantity;
 
+    //TODO add Category, re order level
+
     public Product(int code, String title, double price, int quantity) {
         this.code = code;
         this.title = title;

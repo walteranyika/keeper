@@ -14,20 +14,20 @@ import com.keeper.keeper.fragments.SalesFragment;
 public class SalesActivity extends AppCompatActivity implements SalesFragment.OnShoppingBasketSelectedListener,
         ReceiptDialogFragment.ItemQuantityChangedListener{
 
-    private static final String LIST_FRAGMENT = "list_fragment";
-    private static final String RECEIPT_FRAGMENT = "receipt_fragment";
+    public static final String SALES_FRAGMENT = "sales_fragment";
+    public static final String RECEIPT_FRAGMENT = "receipt_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sales);
-
-        SalesFragment savedFragment = (SalesFragment) getSupportFragmentManager().findFragmentByTag(LIST_FRAGMENT);
+        //show the receipt fragment
+        ReceiptFragment savedFragment = (ReceiptFragment) getSupportFragmentManager().findFragmentByTag(RECEIPT_FRAGMENT);
         if (savedFragment == null) {
-            SalesFragment listFragment = new SalesFragment();
+            ReceiptFragment listFragment = new ReceiptFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.placeHolderSales, listFragment, LIST_FRAGMENT);
+            fragmentTransaction.add(R.id.placeHolderSales, listFragment, RECEIPT_FRAGMENT);
             fragmentTransaction.commit();
         }
     }
@@ -57,4 +57,17 @@ public class SalesActivity extends AppCompatActivity implements SalesFragment.On
         }
     }
 
+
+/*    FragmentManager manager = ( (AppCompatActivity) context ).getSupportFragmentManager ();
+    manager.findFragmentByTag ( tag );
+    FragmentTransaction ft = manager.beginTransaction ();
+
+    if (manager.findFragmentByTag ( tag ) == null) { // No fragment in backStack with same tag..
+        ft.add ( fragmentHolderLayoutId, fragment, tag );
+        ft.addToBackStack ( tag );
+        ft.commit ();
+    }
+    else {
+        ft.show ( manager.findFragmentByTag ( tag ) ).commit ();
+    }*/
 }

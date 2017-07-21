@@ -23,22 +23,24 @@ public class SalesListAdapter extends BaseAdapter {
 
 
     Context mContext;
-    ArrayList<Product> data;
+    ArrayList<Product> temporaryArray;
+    ArrayList<Product> permanentArray;
 
     public SalesListAdapter(Context context, ArrayList<Product> data) {
         this.mContext = context;
-        this.data = data;
-//        this.mListener =listener;
+        this.temporaryArray = data;
+        this.permanentArray=new ArrayList<>();
+        this.permanentArray.addAll(data);
     }
 
     @Override
     public int getCount() {
-        return data.size();// # of items in your arraylist
+        return temporaryArray.size();// # of items in your arraylist
     }
 
     @Override
     public Object getItem(int position) {
-        return data.get(position);// get the actual movie
+        return temporaryArray.get(position);// get the actual movie
     }
 
     @Override
@@ -61,11 +63,34 @@ public class SalesListAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        final Product product = data.get(position);
+        final Product product = temporaryArray.get(position);
         viewHolder.titleTextView.setText(product.getTitle());
         viewHolder.priceTextView.setText("" + product.getPrice());
         viewHolder.codeTextView.setText("" + product.getCode());
         return convertView;
+    }
+
+    public void filter(String text){
+        text=text.toLowerCase();
+        temporaryArray.clear();
+
+        if(text.trim().length()==0)
+        {
+          temporaryArray.addAll(permanentArray);
+        }
+        else
+        {
+            for (Product p:permanentArray)
+            {
+                //|| (p.getCode()+"").contains(text) || (p.getPrice()+"").contains(text)
+               if(p.getTitle().toLowerCase().contains(text) )
+               {
+                  temporaryArray.add(p);
+               }
+            }
+            Log.d("SEARCH","COUNT "+temporaryArray.size());
+        }
+        notifyDataSetChanged();
     }
 
     static class ViewHolder {

@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,11 +16,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.keeper.keeper.R;
+import com.keeper.keeper.SalesActivity;
 import com.keeper.keeper.adapters.ReceiptListAdapter;
 import com.keeper.keeper.databases.TemporaryDb;
 import com.keeper.keeper.models.Product;
 
 import java.util.ArrayList;
+
+import mehdi.sakout.fancybuttons.FancyButton;
 
 /**
  * Created by walter on 7/9/17.
@@ -31,29 +36,51 @@ public class ReceiptFragment extends Fragment {
     ReceiptListAdapter adapter;
     TextView tvTotal;
     TextView tvCounter;
+    FancyButton productsBtn,checkOutBtn;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.receipt_fragment, container, false);
+        ((SalesActivity) getActivity()).getSupportActionBar().setTitle("Cart");
         db= new TemporaryDb(getActivity());
-        LinearLayout layout = (LinearLayout) view.findViewById(R.id.layoutReceiptCounter);
+
         tvTotal= (TextView) view.findViewById(R.id.tvReceiptTotals);
         tvCounter= (TextView) view.findViewById(R.id.tvReceiptCounter);
         tvTotal.setText("KES "+db.getProductsTotalCost());
         tvCounter.setText(db.countItems()+" Items");
+        productsBtn= (FancyButton) view.findViewById(R.id.products);
+        checkOutBtn= (FancyButton) view.findViewById(R.id.btnCheckOut);
 
-        layout.setOnClickListener(new View.OnClickListener() {
+        checkOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Take The User To Final Fragment
                 ChargeFragment chargeFragment=new ChargeFragment();
                 FragmentTransaction ft=getActivity().getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.placeHolderSales, chargeFragment, FRAGMENT_CHARGE);
-                ft.addToBackStack(null);
+                ft.replace(R.id.placeHolderSales, chargeFragment, ChargeFragment.class.getName());
+                ft.addToBackStack(ChargeFragment.class.getName());
                 ft.commit();
             }
         });
+
+        try {
+            productsBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    SalesFragment salesFragment=new SalesFragment();
+                    FragmentTransaction ft=getActivity().getSupportFragmentManager().beginTransaction();
+                    ft.setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left);
+                    ft.replace(R.id.placeHolderSales, salesFragment, SalesActivity.SALES_FRAGMENT);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                }
+            });
+        }
+        catch(NullPointerException e){
+            Log.d("KEEPER", e.getMessage());
+            e.printStackTrace();
+        }
 
         ListView list = (ListView) view.findViewById(R.id.receiptList);
 
@@ -82,4 +109,6 @@ public class ReceiptFragment extends Fragment {
         tvCounter.setText(db.countItems()+" Items");
 
     }
+
+
 }
