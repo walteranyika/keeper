@@ -76,6 +76,4 @@ public class ChargeFragment extends Fragment {
         });
         return view;
     }
-
-
 }

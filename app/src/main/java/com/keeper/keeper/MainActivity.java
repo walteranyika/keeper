@@ -21,21 +21,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ProductsDb db = new ProductsDb(this);
-        //Setup db with temporary data
-        if (db.countItems() == 0)
-        {
-            db.saveProduct(new Product(101, "Maize Floor", 90, 1));
-            db.saveProduct(new Product(102, "Milk", 65, 1));
-            db.saveProduct(new Product(103, "Royco", 70, 1));
-            db.saveProduct(new Product(104, "Soap", 59, 1));
-            db.saveProduct(new Product(105, "Drinking Water", 50, 1));
-            db.saveProduct(new Product(106, "Bread", 55, 1));
-            db.saveProduct(new Product(107, "Cooking Oil", 175, 1));
-            db.saveProduct(new Product(108, "Unga Chapati", 100, 1));
-            db.saveProduct(new Product(109, "Match Stick", 8, 1));
-            db.saveProduct(new Product(110, "Doom", 200, 1));
-        }
 
     }
 
@@ -45,9 +30,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void inventoryBtn(View view) {
        // Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
-        exportDB("sales.db");
+/*        exportDB("sales.db");
         exportDB("products.db");
-        exportDB("tempo.db");
+        exportDB("tempo.db");*/
+        startActivity(new Intent(this, StocksActivity.class));
     }
 
     public void reportsBtn(View view) {

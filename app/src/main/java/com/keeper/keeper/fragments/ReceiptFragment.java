@@ -57,6 +57,7 @@ public class ReceiptFragment extends Fragment {
             public void onClick(View v) {
                 ChargeFragment chargeFragment=new ChargeFragment();
                 FragmentTransaction ft=getActivity().getSupportFragmentManager().beginTransaction();
+                ft.setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left);
                 ft.replace(R.id.placeHolderSales, chargeFragment, ChargeFragment.class.getName());
                 ft.addToBackStack(ChargeFragment.class.getName());
                 ft.commit();

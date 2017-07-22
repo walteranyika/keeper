@@ -3,6 +3,7 @@
           package="com.keeper.keeper">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,6 +23,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".SalesActivity">
+        </activity>
+        <activity
+            android:name=".StocksActivity"
+            android:label="Inventory"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".AddItemActivity">
         </activity>
     </application>
 
