@@ -4,7 +4,6 @@
               android:layout_width="match_parent"
               android:weightSum="5"
               android:padding="8dp"
-              android:descendantFocusability="blocksDescendants"
               android:layout_height="wrap_content">
     <LinearLayout
         android:layout_weight="4"
@@ -55,8 +54,16 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:gravity="right"
-        android:layout_weight="1"
+        android:layout_weight="0.9"
         android:textSize="16sp"
         android:textColor="#545454"
         android:text="100"/>
+
+    <ImageView
+        android:id="@+id/popup_menu"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0.1"
+        android:src="@drawable/vertical_dots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

@@ -2,14 +2,24 @@ package com.keeper.keeper.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.keeper.keeper.EditProductActivity;
 import com.keeper.keeper.R;
+import com.keeper.keeper.databases.ProductsDb;
 import com.keeper.keeper.models.Product;
 
 import java.util.ArrayList;
@@ -55,6 +65,7 @@ public class InventoryListAdapter extends BaseAdapter {
             viewHolder.codeTextView = (TextView) convertView.findViewById(R.id.itemCodeInventory);
             viewHolder.descTextView = (TextView) convertView.findViewById(R.id.itemDescInventory);
             viewHolder.categoryTextView = (TextView) convertView.findViewById(R.id.itemCategoryInventory);
+            viewHolder.popupImageView = (ImageView) convertView.findViewById(R.id.popup_menu);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -65,6 +76,66 @@ public class InventoryListAdapter extends BaseAdapter {
         viewHolder.codeTextView.setText("" + product.getCode());
         viewHolder.descTextView.setText(product.getDescription());
         viewHolder.categoryTextView.setText(product.getCategory());
+
+        viewHolder.popupImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //pop up menu
+                PopupMenu menu = new PopupMenu(mContext, v);
+                menu.getMenuInflater().inflate(R.menu.popup_menu, menu.getMenu());
+                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getTitle().toString().contains("Delete")) {
+                           //DONE  do the deletion
+                            new MaterialDialog.Builder(mContext)
+                                    .title("Delete "+ product.getTitle())
+                                    .content("Are you sure you want to delete "+product.getTitle()+"? Your action will be irreversible.")
+                                    .positiveText("Delete")
+                                    .negativeText("Cancel")
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        @Override
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            ProductsDb db=new ProductsDb(mContext);
+                                            db.deleteProduct(product.getCode());
+                                            temporaryArray.remove(position);
+                                            notifyDataSetChanged();
+                                        }
+                                    })
+                                    .show();
+                        } else if (item.getTitle().toString().contains("Edit")) {
+                            //TODO Edit
+                            Intent editIntent=new Intent(mContext, EditProductActivity.class);
+                            editIntent.putExtra("code",product.getCode());
+                            mContext.startActivity(editIntent);
+                        }
+                        else if (item.getTitle().toString().contains("Adjust")) {
+                            //TODO Adjust
+                            new MaterialDialog.Builder(mContext)
+                                    .title("Edit Quantity")
+                                    .content("Edit quantity for "+product.getTitle())
+                                    .inputType(InputType.TYPE_CLASS_NUMBER)
+                                    .input("Quantity",""+product.getQuantity(), new MaterialDialog.InputCallback() {
+                                        @Override
+                                        public void onInput(MaterialDialog dialog, CharSequence input) {
+                                            int quantity =Integer.parseInt(input.toString());
+                                            if (quantity!=product.getQuantity())
+                                            {
+                                                product.setQuantity(quantity);
+                                                notifyDataSetChanged();
+                                                ProductsDb db = new ProductsDb(mContext);
+                                                db.updateQuantity(product.getCode(), quantity);
+                                            }
+                                        }
+                                    }).show();
+
+                        }
+                        return true;
+                    }
+                });
+                menu.show();
+            }
+        });
         return convertView;
     }
 
@@ -97,6 +168,7 @@ public class InventoryListAdapter extends BaseAdapter {
         TextView priceTextView;
         TextView descTextView;
         TextView categoryTextView;
+        ImageView popupImageView;
     }
 }
 

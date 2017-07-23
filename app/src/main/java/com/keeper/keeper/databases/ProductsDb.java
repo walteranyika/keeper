@@ -64,10 +64,27 @@ public class ProductsDb extends SQLiteOpenHelper {
             values.put("cat_id",getCategoryId(product.getCategory()));
             values.put("desc",product.getDescription());
             Log.d("PRICE", product.getTitle() + " : " + product.getPrice());
-            values.put("quantity", 1);
+            values.put("quantity", product.getQuantity());
             database.insert("products", null, values);
             database.close();
         }
+    }
+
+    /**
+     * Inserts User into SQLite DB
+     */
+    public void updateProduct(Product product) {
+
+            SQLiteDatabase database = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("title", product.getTitle());
+            values.put("price", product.getPrice());
+            values.put("cat_id",getCategoryId(product.getCategory()));
+            values.put("desc",product.getDescription());
+            Log.d("PRICE", product.getTitle() + " : " + product.getPrice());
+            values.put("quantity", product.getQuantity());
+            database.update("products",values,"code="+product.getCode(),null);
+            database.close();
     }
     /**
      * Inserts Category into SQLite DB
@@ -108,7 +125,25 @@ public class ProductsDb extends SQLiteOpenHelper {
         return data;
     }
 
-
+    /**
+     * Get list of Product from SQLite DB as Array List of Products
+     *
+     * @return ArrayList<Product>
+     */
+    public Product getProduct(int code) {
+       Product product=null;
+        String selectQuery = "SELECT  products.code, products.title,products.price, products.quantity, products.desc,categories.category FROM products JOIN categories ON products.cat_id=categories.id WHERE products.code="+code;
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                product = new Product(cursor.getInt(0),cursor.getString(1),cursor.getDouble(2),cursor.getInt(3),cursor.getString(4),cursor.getString(5));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+        return product;
+    }
     /**
      * Get Count of  Number of  SQLite records
      *
@@ -128,10 +163,9 @@ public class ProductsDb extends SQLiteOpenHelper {
 
     /**
      * Delete A record Based on Its ID Number
-     *
      * @param  code
      */
-    public void deleteItem(int code) {
+    public void deleteProduct(int code) {
         SQLiteDatabase database = this.getWritableDatabase();
         database.delete("products", "code=" + code, null);
         database.close();
