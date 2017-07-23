@@ -29,7 +29,6 @@
         android:text="Category"/>
 
     <Spinner
-        android:entries="@array/temporary_categories"
         android:id="@+id/spinnerItemCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

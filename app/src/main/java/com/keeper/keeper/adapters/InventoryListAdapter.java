@@ -14,16 +14,12 @@ import com.keeper.keeper.models.Product;
 
 import java.util.ArrayList;
 
-/**
- * Created by walter on 7/9/17.
- */
-
 public class InventoryListAdapter extends BaseAdapter {
 
 
-    Context mContext;
-    ArrayList<Product> temporaryArray;
-    ArrayList<Product> permanentArray;
+    private Context mContext;
+    private ArrayList<Product> temporaryArray;
+    private ArrayList<Product> permanentArray;
 
     public InventoryListAdapter(Context context, ArrayList<Product> data) {
         this.mContext = context;
@@ -85,7 +81,7 @@ public class InventoryListAdapter extends BaseAdapter {
             for (Product p:permanentArray)
             {
                 //|| (p.getCode()+"").contains(text) || (p.getPrice()+"").contains(text)
-               if(p.getTitle().toLowerCase().contains(text) )
+               if(p.getTitle().toLowerCase().contains(text) || (p.getCode()+"").contains(text) || (p.getPrice()+"").contains(text) || p.getCategory().toLowerCase().contains(text)|| p.getDescription().toLowerCase().contains(text))
                {
                   temporaryArray.add(p);
                }

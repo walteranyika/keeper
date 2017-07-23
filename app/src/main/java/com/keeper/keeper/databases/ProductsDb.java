@@ -19,16 +19,19 @@ import java.util.ArrayList;
 public class ProductsDb extends SQLiteOpenHelper {
 
     //create a database called demo_database.db
-    public ProductsDb(Context applicationcontext) {
-        super(applicationcontext, "products.db", null, 3);
+    public ProductsDb(Context application_context) {
+        super(application_context, "products.db", null, 4);
     }
 
     //Creates Table
     @Override
     public void onCreate(SQLiteDatabase database) {
-        String query;
-        query = "CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER, category TEXT, desc TEXT)";
+
+        String query = "CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER, desc TEXT,cat_id INTEGER)";
         database.execSQL(query);
+        String query2 = "CREATE TABLE IF NOT EXISTS categories(id INTEGER PRIMARY KEY, category TEXT UNIQUE NOT NULL, UNIQUE(category) ON CONFLICT IGNORE)";
+        database.execSQL(query2);
+
     }
 
     @Override
@@ -36,7 +39,10 @@ public class ProductsDb extends SQLiteOpenHelper {
         String sql;
         sql = "DROP TABLE IF EXISTS products";
         database.execSQL(sql);
-        database.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER, category TEXT, desc TEXT)");
+        database.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER,desc TEXT, cat_id INTEGER)");
+        String sql_2 ="DROP TABLE IF EXISTS categories";
+        database.execSQL(sql_2);
+        database.execSQL("CREATE TABLE IF NOT EXISTS categories(id INTEGER PRIMARY KEY, category TEXT UNIQUE NOT NULL, UNIQUE(category) ON CONFLICT IGNORE)");
         onCreate(database);
     }
 
@@ -55,13 +61,26 @@ public class ProductsDb extends SQLiteOpenHelper {
             values.put("title", product.getTitle());
             values.put("code", product.getCode());
             values.put("price", product.getPrice());
-            values.put("category",product.getCategory());
+            values.put("cat_id",getCategoryId(product.getCategory()));
             values.put("desc",product.getDescription());
             Log.d("PRICE", product.getTitle() + " : " + product.getPrice());
             values.put("quantity", 1);
             database.insert("products", null, values);
             database.close();
         }
+    }
+    /**
+     * Inserts Category into SQLite DB
+     */
+    public void saveCategory(String category) {
+
+
+            SQLiteDatabase database = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("category", category);
+            database.insert("categories", null, values);
+            database.close();
+
     }
 
     /**
@@ -72,12 +91,15 @@ public class ProductsDb extends SQLiteOpenHelper {
     public ArrayList<Product> getProducts() {
         ArrayList<Product> data;
         data = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM products";
+        //(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER, desc TEXT,cat_id INTEGER)";
+
+        String selectQuery = "SELECT  products.code, products.title,products.price, products.quantity, products.desc,categories.category FROM products JOIN categories ON products.cat_id=categories.id";
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                Product person = new Product(cursor.getInt(2), cursor.getString(1), cursor.getDouble(3), cursor.getInt(4),cursor.getString(6),cursor.getString(5));
+                //(int code, String title, double price, int quantity, String description, String category)
+                Product person = new Product(cursor.getInt(0),cursor.getString(1),cursor.getDouble(2),cursor.getInt(3),cursor.getString(4),cursor.getString(5));
                 data.add(person);
             } while (cursor.moveToNext());
         }
@@ -203,7 +225,7 @@ public class ProductsDb extends SQLiteOpenHelper {
     public ArrayList<Category> getCategories() {
         ArrayList<Category> data;
         data = new ArrayList<>();
-        String selectQuery = "SELECT  category, sum(quantity) FROM products GROUP BY category";
+        String selectQuery = "SELECT categories.category, COUNT(products.title) FROM categories LEFT JOIN products ON categories.id=products.cat_id GROUP BY categories.category";
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
@@ -228,20 +250,32 @@ public class ProductsDb extends SQLiteOpenHelper {
     public ArrayList<String> getUniqueCategories() {
         ArrayList<String> data;
         data = new ArrayList<>();
-        String selectQuery = "SELECT  category, sum(quantity) FROM products GROUP BY category";
+        String selectQuery = "SELECT  * FROM categories";
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do
             {
-                data.add(cursor.getString(0));
-                Log.d("CATEGORIES STRING", cursor.getString(0));
+                data.add(cursor.getString(1));
+                Log.d("CATEGORIES STRING", cursor.getString(1));
             }
             while (cursor.moveToNext());
         }
         cursor.close();
         database.close();
         return data;
+    }
+
+    public int getCategoryId(String category){
+        String selectQuery = "SELECT  id FROM categories WHERE category='"+category+"'";
+        SQLiteDatabase database = this.getReadableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst())
+        {
+            Log.d("ID", "ID is "+cursor.getInt(0));
+           return cursor.getInt(0);
+        }
+        return 0;
     }
 
 }
