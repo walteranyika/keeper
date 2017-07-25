@@ -21,27 +21,35 @@
 
 
         <LinearLayout
-            android:weightSum="2"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:paddingLeft="4dp"
                 android:textSize="8dp"
                 android:id="@+id/itemCodeInventory"
-                android:layout_width="0dp"
-                android:layout_weight="0.3"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="10001"/>
             <TextView
+                android:paddingLeft="4dp"
                 android:textSize="8dp"
                 android:id="@+id/itemCategoryInventory"
-                android:layout_width="0dp"
-                android:layout_weight="1.7"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Kitchen"/>
-
+            <TextView
+                android:paddingLeft="4dp"
+                android:textSize="8dp"
+                android:id="@+id/itemQuantityInventory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#4f2b6b"
+                android:text="100"/>
         </LinearLayout>
+
         <TextView
+            android:paddingLeft="4dp"
             android:textSize="8dp"
             android:id="@+id/itemDescInventory"
             android:layout_width="match_parent"

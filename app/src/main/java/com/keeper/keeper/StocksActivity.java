@@ -72,7 +72,7 @@ public class StocksActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_stocks, menu);
+       // getMenuInflater().inflate(R.menu.menu_stocks, menu);
         return true;
     }
 
@@ -115,7 +115,7 @@ public class StocksActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Items";
+                    return "Inventory";
                 case 1:
                     return "Categories";
             }

@@ -32,11 +32,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void inventoryBtn(View view) {
-
-       // Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
-/*      exportDB(date+"sales.db");
+        // Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
+        //exportDB("sales.db");
+        //exportDB("tempo.db");
         exportDB("products.db");
-        exportDB("tempo.db");*/
         startActivity(new Intent(this, StocksActivity.class));
     }
 
@@ -64,18 +63,18 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
     }
 
-    private void exportDB(String db){
+    private void exportDB(String db) {
         File sd = Environment.getExternalStorageDirectory();
         File data = Environment.getDataDirectory();
-        FileChannel source=null;
-        FileChannel destination=null;
-        String currentDBPath = "/data/"+ "com.keeper.keeper" +"/databases/"+db;
+        FileChannel source = null;
+        FileChannel destination = null;
+        String currentDBPath = "/data/" + "com.keeper.keeper" + "/databases/" + db;
         Calendar calender = Calendar.getInstance();
-        Date leo=calender.getTime();
-        String date_f =new SimpleDateFormat("Y_m_d").format(leo);
+        Date leo = calender.getTime();
+        String date_f = new SimpleDateFormat("yyyy_m_dd").format(leo);
 
         String backupDBPath = db;
-        backupDBPath =backupDBPath+"_"+date_f;
+        backupDBPath = backupDBPath + "_" + date_f;
 
         File currentDB = new File(data, currentDBPath);
         File backupDB = new File(sd, backupDBPath);
@@ -85,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
             destination.transferFrom(source, 0, source.size());
             source.close();
             destination.close();
-            Toast.makeText(this, "DB Exported!", Toast.LENGTH_LONG).show();
-        } catch(IOException e) {
+            //Toast.makeText(this, "DB Exported!", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

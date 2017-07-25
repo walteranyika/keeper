@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -16,11 +18,11 @@ import java.util.ArrayList;
 
 public class AddItemActivity extends AppCompatActivity {
     EditText mEditTextName, mEditTextPrice, mEditTextDescription, mEditTextQty, mEditTextCode;
-    Spinner mSpinner;//TODO Fetch data from db
+    Spinner mSpinner;
     ProductsDb mProductsDb;
     ArrayList<String> spinnerData;
     ArrayAdapter<String> spinnerAdapter;
-    //TODO Add automatic code addition
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +53,9 @@ public class AddItemActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         if (item.getItemId() == R.id.menu_item_add) {
+            hideKeyBoard();
             if (validateField(mEditTextCode) && validateField(mEditTextName) && validateField(mEditTextPrice) && validateField(mEditTextQty) && validateField(mEditTextDescription)) {
                 String name = mEditTextName.getText().toString().trim();
                 String price_str = mEditTextPrice.getText().toString().trim();
@@ -101,4 +105,12 @@ public class AddItemActivity extends AppCompatActivity {
         spinnerData.addAll(mProductsDb.getUniqueCategories());
         spinnerAdapter.notifyDataSetChanged();
     }
+    private void hideKeyBoard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
 }

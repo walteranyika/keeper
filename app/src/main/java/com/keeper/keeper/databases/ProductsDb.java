@@ -215,6 +215,8 @@ public class ProductsDb extends SQLiteOpenHelper {
      */
     public void updateQuantity(int code, int quantity) {
         SQLiteDatabase database = this.getWritableDatabase();
+        int initial=getProductQuantity(code);
+        quantity=quantity+initial;
         String updateQuery = "UPDATE  products SET quantity=" + quantity + " WHERE code=" + code;
         database.execSQL(updateQuery);
         database.close();

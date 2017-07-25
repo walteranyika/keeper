@@ -34,7 +34,7 @@ public class InventoryListAdapter extends BaseAdapter {
     public InventoryListAdapter(Context context, ArrayList<Product> data) {
         this.mContext = context;
         this.temporaryArray = data;
-        this.permanentArray=new ArrayList<>();
+        this.permanentArray = new ArrayList<>();
         this.permanentArray.addAll(data);
     }
 
@@ -66,16 +66,20 @@ public class InventoryListAdapter extends BaseAdapter {
             viewHolder.descTextView = (TextView) convertView.findViewById(R.id.itemDescInventory);
             viewHolder.categoryTextView = (TextView) convertView.findViewById(R.id.itemCategoryInventory);
             viewHolder.popupImageView = (ImageView) convertView.findViewById(R.id.popup_menu);
+            viewHolder.qtyTextView = (TextView) convertView.findViewById(R.id.itemQuantityInventory);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
         final Product product = temporaryArray.get(position);
         viewHolder.titleTextView.setText(product.getTitle());
         viewHolder.priceTextView.setText("" + product.getPrice());
-        viewHolder.codeTextView.setText("" + product.getCode());
+        viewHolder.codeTextView.setText("Code: " + product.getCode());
         viewHolder.descTextView.setText(product.getDescription());
         viewHolder.categoryTextView.setText(product.getCategory());
+        viewHolder.qtyTextView.setText(product.getQuantity() + " Items");
+
 
         viewHolder.popupImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,16 +91,16 @@ public class InventoryListAdapter extends BaseAdapter {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getTitle().toString().contains("Delete")) {
-                           //DONE  do the deletion
+                            //DONE  do the deletion
                             new MaterialDialog.Builder(mContext)
-                                    .title("Delete "+ product.getTitle())
-                                    .content("Are you sure you want to delete "+product.getTitle()+"? Your action will be irreversible.")
+                                    .title("Delete " + product.getTitle())
+                                    .content("Are you sure you want to delete " + product.getTitle() + "? Your action will be irreversible.")
                                     .positiveText("Delete")
                                     .negativeText("Cancel")
                                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                                         @Override
                                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                            ProductsDb db=new ProductsDb(mContext);
+                                            ProductsDb db = new ProductsDb(mContext);
                                             db.deleteProduct(product.getCode());
                                             temporaryArray.remove(position);
                                             notifyDataSetChanged();
@@ -105,26 +109,27 @@ public class InventoryListAdapter extends BaseAdapter {
                                     .show();
                         } else if (item.getTitle().toString().contains("Edit")) {
                             //TODO Edit
-                            Intent editIntent=new Intent(mContext, EditProductActivity.class);
-                            editIntent.putExtra("code",product.getCode());
+                            Intent editIntent = new Intent(mContext, EditProductActivity.class);
+                            editIntent.putExtra("code", product.getCode());
                             mContext.startActivity(editIntent);
-                        }
-                        else if (item.getTitle().toString().contains("Adjust")) {
+                        } else if (item.getTitle().toString().contains("Adjust")) {
                             //TODO Adjust
                             new MaterialDialog.Builder(mContext)
-                                    .title("Edit Quantity")
-                                    .content("Edit quantity for "+product.getTitle())
+                                    .title("Add Quantity")
+                                    .content("Add quantity for " + product.getTitle())
                                     .inputType(InputType.TYPE_CLASS_NUMBER)
-                                    .input("Quantity",""+product.getQuantity(), new MaterialDialog.InputCallback() {
+                                    .input("Quantity", "" ,new MaterialDialog.InputCallback() {
                                         @Override
                                         public void onInput(MaterialDialog dialog, CharSequence input) {
-                                            int quantity =Integer.parseInt(input.toString());
-                                            if (quantity!=product.getQuantity())
-                                            {
-                                                product.setQuantity(quantity);
+                                            try {
+                                                int quantity = Integer.parseInt(input.toString());
+                                                product.setQuantity(quantity+product.getQuantity());
                                                 notifyDataSetChanged();
                                                 ProductsDb db = new ProductsDb(mContext);
                                                 db.updateQuantity(product.getCode(), quantity);
+                                            }catch (NumberFormatException e)
+                                            {
+
                                             }
                                         }
                                     }).show();
@@ -139,25 +144,19 @@ public class InventoryListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void filter(String text){
-        text=text.toLowerCase();
+    public void filter(String text) {
+        text = text.toLowerCase();
         temporaryArray.clear();
-
-        if(text.trim().length()==0)
-        {
-          temporaryArray.addAll(permanentArray);
-        }
-        else
-        {
-            for (Product p:permanentArray)
-            {
+        if (text.trim().length() == 0) {
+            temporaryArray.addAll(permanentArray);
+        } else {
+            for (Product p : permanentArray) {
                 //|| (p.getCode()+"").contains(text) || (p.getPrice()+"").contains(text)
-               if(p.getTitle().toLowerCase().contains(text) || (p.getCode()+"").contains(text) || (p.getPrice()+"").contains(text) || p.getCategory().toLowerCase().contains(text)|| p.getDescription().toLowerCase().contains(text))
-               {
-                  temporaryArray.add(p);
-               }
+                if (p.getTitle().toLowerCase().contains(text) || (p.getCode() + "").contains(text) || (p.getPrice() + "").contains(text) || p.getCategory().toLowerCase().contains(text) || p.getDescription().toLowerCase().contains(text)) {
+                    temporaryArray.add(p);
+                }
             }
-            Log.d("SEARCH","COUNT "+temporaryArray.size());
+            Log.d("SEARCH", "COUNT " + temporaryArray.size());
         }
         notifyDataSetChanged();
     }
@@ -169,6 +168,7 @@ public class InventoryListAdapter extends BaseAdapter {
         TextView descTextView;
         TextView categoryTextView;
         ImageView popupImageView;
+        TextView qtyTextView;
     }
 }
 
