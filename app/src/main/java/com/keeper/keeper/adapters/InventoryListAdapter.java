@@ -3,6 +3,9 @@ package com.keeper.keeper.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.text.InputType;
 import android.util.Log;
@@ -67,6 +70,7 @@ public class InventoryListAdapter extends BaseAdapter {
             viewHolder.categoryTextView = (TextView) convertView.findViewById(R.id.itemCategoryInventory);
             viewHolder.popupImageView = (ImageView) convertView.findViewById(R.id.popup_menu);
             viewHolder.qtyTextView = (TextView) convertView.findViewById(R.id.itemQuantityInventory);
+            viewHolder.colorView =convertView.findViewById(R.id.colorView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -79,6 +83,13 @@ public class InventoryListAdapter extends BaseAdapter {
         viewHolder.descTextView.setText(product.getDescription());
         viewHolder.categoryTextView.setText(product.getCategory());
         viewHolder.qtyTextView.setText(product.getQuantity() + " Items");
+        @ColorInt int color=product.getColor();
+
+        GradientDrawable gd=new GradientDrawable();
+        gd.setColor(color);
+        gd.setCornerRadius(5);
+        viewHolder.colorView.setBackground(gd);
+
 
 
         viewHolder.popupImageView.setOnClickListener(new View.OnClickListener() {
@@ -169,6 +180,7 @@ public class InventoryListAdapter extends BaseAdapter {
         TextView categoryTextView;
         ImageView popupImageView;
         TextView qtyTextView;
+        View colorView;
     }
 }
 

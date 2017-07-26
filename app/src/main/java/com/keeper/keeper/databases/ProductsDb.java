@@ -20,7 +20,7 @@ public class ProductsDb extends SQLiteOpenHelper {
 
     //create a database called demo_database.db
     public ProductsDb(Context application_context) {
-        super(application_context, "products.db", null, 4);
+        super(application_context, "products.db", null, 5);
     }
 
     //Creates Table
@@ -29,7 +29,7 @@ public class ProductsDb extends SQLiteOpenHelper {
 
         String query = "CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER, desc TEXT,cat_id INTEGER)";
         database.execSQL(query);
-        String query2 = "CREATE TABLE IF NOT EXISTS categories(id INTEGER PRIMARY KEY, category TEXT UNIQUE NOT NULL, UNIQUE(category) ON CONFLICT IGNORE)";
+        String query2 = "CREATE TABLE IF NOT EXISTS categories(id INTEGER PRIMARY KEY, category TEXT UNIQUE NOT NULL, color INTEGER NOT NULL,UNIQUE(category) ON CONFLICT IGNORE)";
         database.execSQL(query2);
 
     }
@@ -42,7 +42,7 @@ public class ProductsDb extends SQLiteOpenHelper {
         database.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER,desc TEXT, cat_id INTEGER)");
         String sql_2 ="DROP TABLE IF EXISTS categories";
         database.execSQL(sql_2);
-        database.execSQL("CREATE TABLE IF NOT EXISTS categories(id INTEGER PRIMARY KEY, category TEXT UNIQUE NOT NULL, UNIQUE(category) ON CONFLICT IGNORE)");
+        database.execSQL("CREATE TABLE IF NOT EXISTS categories(id INTEGER PRIMARY KEY, category TEXT UNIQUE NOT NULL,color INTEGER NOT NULL, UNIQUE(category) ON CONFLICT IGNORE)");
         onCreate(database);
     }
 
@@ -58,11 +58,11 @@ public class ProductsDb extends SQLiteOpenHelper {
         {
             SQLiteDatabase database = this.getWritableDatabase();
             ContentValues values = new ContentValues();
-            values.put("title", product.getTitle());
+            values.put("title", capitalizeText(product.getTitle()));
             values.put("code", product.getCode());
             values.put("price", product.getPrice());
             values.put("cat_id",getCategoryId(product.getCategory()));
-            values.put("desc",product.getDescription());
+            values.put("desc",capitalizeText(product.getDescription()));
             Log.d("PRICE", product.getTitle() + " : " + product.getPrice());
             values.put("quantity", product.getQuantity());
             database.insert("products", null, values);
@@ -77,10 +77,10 @@ public class ProductsDb extends SQLiteOpenHelper {
 
             SQLiteDatabase database = this.getWritableDatabase();
             ContentValues values = new ContentValues();
-            values.put("title", product.getTitle());
+            values.put("title", capitalizeText(product.getTitle()));
             values.put("price", product.getPrice());
             values.put("cat_id",getCategoryId(product.getCategory()));
-            values.put("desc",product.getDescription());
+            values.put("desc",capitalizeText(product.getDescription()));
             Log.d("PRICE", product.getTitle() + " : " + product.getPrice());
             values.put("quantity", product.getQuantity());
             database.update("products",values,"code="+product.getCode(),null);
@@ -89,12 +89,13 @@ public class ProductsDb extends SQLiteOpenHelper {
     /**
      * Inserts Category into SQLite DB
      */
-    public void saveCategory(String category) {
+    public void saveCategory(String category, int color) {
 
 
             SQLiteDatabase database = this.getWritableDatabase();
             ContentValues values = new ContentValues();
-            values.put("category", category);
+            values.put("category", capitalizeText(category));
+            values.put("color",color);
             database.insert("categories", null, values);
             database.close();
 
@@ -110,13 +111,13 @@ public class ProductsDb extends SQLiteOpenHelper {
         data = new ArrayList<>();
         //(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER, desc TEXT,cat_id INTEGER)";
 
-        String selectQuery = "SELECT  products.code, products.title,products.price, products.quantity, products.desc,categories.category FROM products JOIN categories ON products.cat_id=categories.id";
+        String selectQuery = "SELECT  products.code, products.title,products.price, products.quantity, products.desc,categories.category,categories.color FROM products JOIN categories ON products.cat_id=categories.id";
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
                 //(int code, String title, double price, int quantity, String description, String category)
-                Product person = new Product(cursor.getInt(0),cursor.getString(1),cursor.getDouble(2),cursor.getInt(3),cursor.getString(4),cursor.getString(5));
+                Product person = new Product(cursor.getInt(0),cursor.getString(1),cursor.getDouble(2),cursor.getInt(3),cursor.getString(4),cursor.getString(5), cursor.getInt(6));
                 data.add(person);
             } while (cursor.moveToNext());
         }
@@ -132,12 +133,12 @@ public class ProductsDb extends SQLiteOpenHelper {
      */
     public Product getProduct(int code) {
        Product product=null;
-        String selectQuery = "SELECT  products.code, products.title,products.price, products.quantity, products.desc,categories.category FROM products JOIN categories ON products.cat_id=categories.id WHERE products.code="+code;
+        String selectQuery = "SELECT  products.code, products.title,products.price, products.quantity, products.desc,categories.category, category.color FROM products JOIN categories ON products.cat_id=categories.id WHERE products.code="+code;
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                product = new Product(cursor.getInt(0),cursor.getString(1),cursor.getDouble(2),cursor.getInt(3),cursor.getString(4),cursor.getString(5));
+                product = new Product(cursor.getInt(0),cursor.getString(1),cursor.getDouble(2),cursor.getInt(3),cursor.getString(4),cursor.getString(5),cursor.getInt(6));
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -261,13 +262,13 @@ public class ProductsDb extends SQLiteOpenHelper {
     public ArrayList<Category> getCategories() {
         ArrayList<Category> data;
         data = new ArrayList<>();
-        String selectQuery = "SELECT categories.category, COUNT(products.title) FROM categories LEFT JOIN products ON categories.id=products.cat_id GROUP BY categories.category";
+        String selectQuery = "SELECT categories.category, COUNT(products.title) , categories.color FROM categories LEFT JOIN products ON categories.id=products.cat_id GROUP BY categories.category";
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do
             {
-                data.add(new Category(cursor.getString(0),cursor.getInt(1)));
+                data.add(new Category(cursor.getString(0),cursor.getInt(1), cursor.getInt(2)));
                 Log.d("CATEGORIES", cursor.getString(0)+""+cursor.getInt(1));
             }
             while (cursor.moveToNext());
@@ -312,6 +313,14 @@ public class ProductsDb extends SQLiteOpenHelper {
            return cursor.getInt(0);
         }
         return 0;
+    }
+
+    public String capitalizeText(String original) {
+        if (original == null || original.length() == 0) {
+            return original;
+        }
+        original=original.toLowerCase();
+        return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
 
 }

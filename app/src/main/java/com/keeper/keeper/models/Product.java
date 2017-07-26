@@ -11,8 +11,16 @@ public class Product {
     private int quantity;
     private String description;
     private String category;
+    private int color;
 
-    //TODO add Category, re order level
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+//TODO add Category, re order level
 
     public Product(int code, String title, double price, int quantity) {
         this.code = code;
@@ -29,6 +37,16 @@ public class Product {
         this.quantity = quantity;
         this.description = description;
         this.category = category;
+    }
+
+    public Product(int code, String title, double price, int quantity, String description, String category, int color) {
+        this.code = code;
+        this.title = title;
+        this.price = price;
+        this.quantity = quantity;
+        this.description = description;
+        this.category = category;
+        this.color = color;
     }
 
     public String getDescription() {

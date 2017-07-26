@@ -2,6 +2,9 @@ package com.keeper.keeper.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.ColorInt;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +60,7 @@ public class CategoriesListAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             viewHolder.titleTextView = (TextView) convertView.findViewById(R.id.tvCategoriesTitle);
             viewHolder.countTextView = (TextView) convertView.findViewById(R.id.tvCategoriesCount);
+            viewHolder.colorView = convertView.findViewById(R.id.colorView);
 
             convertView.setTag(viewHolder);
         } else {
@@ -64,7 +68,20 @@ public class CategoriesListAdapter extends BaseAdapter {
         }
         final Category product = temporaryArray.get(position);
         viewHolder.titleTextView.setText(product.getTitle());
-        viewHolder.countTextView.setText(product.getCount()+" Items");
+        String items =product.getCount()>1?"Items":"Item";
+        if (product.getCount()==0){
+            items="No Items";
+            viewHolder.countTextView.setText(items);
+        }else{
+            viewHolder.countTextView.setText(product.getCount()+" "+items);
+        }
+
+        @ColorInt int color=product.getColor();
+
+        GradientDrawable gd=new GradientDrawable();
+        gd.setColor(color);
+        gd.setCornerRadius(5);
+        viewHolder.colorView.setBackground(gd);
 
         return convertView;
     }
@@ -95,6 +112,7 @@ public class CategoriesListAdapter extends BaseAdapter {
     static class ViewHolder {
         TextView titleTextView;
         TextView countTextView;
+        View colorView;
     }
 }
 
