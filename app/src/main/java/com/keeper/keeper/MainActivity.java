@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reportsBtn(View view) {
-        Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, ReportsActivity.class));
     }
 
     public void quotesBtn(View view) {

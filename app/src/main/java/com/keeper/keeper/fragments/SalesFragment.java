@@ -118,7 +118,7 @@ public class SalesFragment extends Fragment {
             FragmentTransaction ft=manager.beginTransaction();
             if(manager.findFragmentByTag(SalesActivity.RECEIPT_FRAGMENT)==null){
                 ReceiptFragment receiptFragment = new ReceiptFragment();
-                ft.add(R.id.placeHolderSales,receiptFragment,SalesActivity.RECEIPT_FRAGMENT);
+                ft.add(R.id.placeHolderReports,receiptFragment,SalesActivity.RECEIPT_FRAGMENT);
                 ft.addToBackStack(SalesActivity.RECEIPT_FRAGMENT);
                 ft.commit();
                 Toast.makeText(getActivity(), "Not Found", Toast.LENGTH_SHORT).show();

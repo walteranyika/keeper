@@ -6,12 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -58,7 +55,7 @@ public class ReceiptFragment extends Fragment {
                 ChargeFragment chargeFragment=new ChargeFragment();
                 FragmentTransaction ft=getActivity().getSupportFragmentManager().beginTransaction();
                 ft.setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left);
-                ft.replace(R.id.placeHolderSales, chargeFragment, ChargeFragment.class.getName());
+                ft.replace(R.id.placeHolderReports, chargeFragment, ChargeFragment.class.getName());
                 ft.addToBackStack(ChargeFragment.class.getName());
                 ft.commit();
             }
@@ -72,7 +69,7 @@ public class ReceiptFragment extends Fragment {
                     SalesFragment salesFragment=new SalesFragment();
                     FragmentTransaction ft=getActivity().getSupportFragmentManager().beginTransaction();
                     ft.setCustomAnimations(R.anim.enter_from_right,R.anim.exit_to_left);
-                    ft.replace(R.id.placeHolderSales, salesFragment, SalesActivity.SALES_FRAGMENT);
+                    ft.replace(R.id.placeHolderReports, salesFragment, SalesActivity.SALES_FRAGMENT);
                     ft.addToBackStack(null);
                     ft.commit();
                 }

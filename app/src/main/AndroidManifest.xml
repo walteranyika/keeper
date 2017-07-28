@@ -46,6 +46,11 @@
             android:label="Update Product"
             android:parentActivityName=".StocksActivity">
         </activity>
+        <activity
+            android:name=".ReportsActivity"
+            android:label="@string/title_activity_reports"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

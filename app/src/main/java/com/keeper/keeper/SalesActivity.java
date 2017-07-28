@@ -4,7 +4,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.keeper.keeper.fragments.ReceiptDialogFragment;
@@ -27,7 +26,7 @@ public class SalesActivity extends AppCompatActivity implements SalesFragment.On
             ReceiptFragment listFragment = new ReceiptFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.placeHolderSales, listFragment, RECEIPT_FRAGMENT);
+            fragmentTransaction.add(R.id.placeHolderReports, listFragment, RECEIPT_FRAGMENT);
             fragmentTransaction.commit();
         }
     }
@@ -37,7 +36,7 @@ public class SalesActivity extends AppCompatActivity implements SalesFragment.On
 
         ReceiptFragment receiptFragment = new ReceiptFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.placeHolderSales, receiptFragment, RECEIPT_FRAGMENT);
+        fragmentTransaction.replace(R.id.placeHolderReports, receiptFragment, RECEIPT_FRAGMENT);
         fragmentTransaction.addToBackStack("added");
         fragmentTransaction.commit();
 

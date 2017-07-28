@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_daily_reports"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Overall Daily"/>
+        <item
+            android:id="@+id/nav_category_reports"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Sales By Category"/>
+        <item
+            android:id="@+id/nav_top_selling_reports"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Top Selling"/>
+        <item
+            android:id="@+id/nav_inventory_reports"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Inventory"/>
+
+        <item
+            android:id="@+id/nav_sales_by_customer_reports"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Sales By Customers"/>
+
+        <item
+            android:id="@+id/nav_sales_by_month_reports"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Monthly Sales"/>
+    </group>
+
+    <item android:title="Charts">
+
+        <menu>
+            <item
+                android:id="@+id/nav_daily_charts"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Daily Sales"/>
+
+            <item
+                android:id="@+id/nav_monthly_charts"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Monthly Sales"/>
+        </menu>
+
+    </item>
+
+</menu>
