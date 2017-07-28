@@ -18,4 +18,18 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="title_activity_welcome">Home Screen</string>
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">Start Now</string>
+    <string name="slide_1_title">Just Here!</string>
+    <string name="slide_1_desc">The easiest way to keep in touch with your Friends!</string>
+    <string name="slide_2_title">Lots of Sticker</string>
+    <string name="slide_2_desc">Sticker is best way then long text!</string>
+    <string name="slide_3_title">Group Discussion</string>
+    <string name="slide_3_desc">Make group of best buddies and have fun!</string>
+    <string name="home_title">Welcome to Application</string>
+    <string name="home_desc">make friends and have fun.</string>
+
 </resources>

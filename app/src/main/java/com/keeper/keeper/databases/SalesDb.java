@@ -10,6 +10,7 @@ import com.keeper.keeper.models.PurchaseSummary;
 import com.keeper.keeper.models.PurchasedItem;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by walter on 7/11/17.
@@ -74,8 +75,10 @@ public class SalesDb extends SQLiteOpenHelper {
 
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        Random rand=new Random();
+        int randomNum = rand.nextInt((9999 - 1000) + 1) + 1000;
 
-        values.put("code","A001");
+        values.put("code",""+randomNum);
         values.put("product",product.getProduct());
         values.put("price", product.getPrice());
         values.put("quantity",product.getQuantity());
@@ -94,7 +97,6 @@ public class SalesDb extends SQLiteOpenHelper {
 
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
 
         values.put("code",product.getCode());
         values.put("total_price", product.getTotal_price());
@@ -134,9 +136,8 @@ public class SalesDb extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
-            do {
-                //    public PurchaseSummary(String code, double total_price, int purchase_date, String purchase_month, String raw_date, int customer_id) {
-
+            do
+            {
                 PurchaseSummary item = new PurchaseSummary(cursor.getString(1),cursor.getDouble(2),cursor.getInt(3),cursor.getString(4),cursor.getString(5),cursor.getInt(6));
                 data.add(item);
             } while (cursor.moveToNext());
