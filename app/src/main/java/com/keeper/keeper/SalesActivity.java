@@ -1,10 +1,12 @@
 package com.keeper.keeper;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.keeper.keeper.fragments.ReceiptDialogFragment;
 import com.keeper.keeper.fragments.ReceiptFragment;
@@ -54,6 +56,15 @@ public class SalesActivity extends AppCompatActivity implements SalesFragment.On
         {
             Log.d("FRAGMENT","NULL");
         }
+    }
+
+    public void openContacts(View view) {
+        startActivity(new Intent(this, AddressBookActivity.class));
+    }
+
+
+    public void openInventory(View view) {
+        startActivity(new Intent(this, StocksActivity.class));
     }
 
 

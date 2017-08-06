@@ -16,10 +16,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="title_activity_welcome">Home Screen</string>
     <string name="next">NEXT</string>
     <string name="skip">SKIP</string>
     <string name="start">Start Now</string>
@@ -29,7 +26,10 @@
     <string name="slide_2_desc">Immediately convert your Android phone into an intuitive and easy to use retail POS Point of Sale</string>
     <string name="slide_3_title">SCALABLE</string>
     <string name="slide_3_desc">Use in small mom and pop stores and restaurants as well as corporate chains with many locations.</string>
-    <string name="home_title">Welcome to Application</string>
-    <string name="home_desc">make friends and have fun.</string>
+    <string name="title_activity_address_book">AddressBookActivity</string>
+    <string name="title_activity_quotes_orders">QuotesOrdersActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

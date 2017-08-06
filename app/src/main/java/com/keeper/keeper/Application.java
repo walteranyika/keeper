@@ -1,5 +1,7 @@
 package com.keeper.keeper;
 
+import com.keeper.keeper.utils.Prefs;
+
 public class Application extends android.app.Application {
     private Prefs prefs;
     private static Application app;

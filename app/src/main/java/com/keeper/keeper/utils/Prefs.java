@@ -1,4 +1,4 @@
-package com.keeper.keeper;
+package com.keeper.keeper.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

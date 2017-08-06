@@ -2,6 +2,7 @@ package com.keeper.keeper;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.keeper.keeper.utils.Prefs;
 
 
 public class IntroActivity extends AppCompatActivity {
@@ -33,9 +37,17 @@ public class IntroActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Prefs prefs=Application.getApp().getPrefs();
-        if(!prefs.isFirstTimeLaunch()){
-           launchHomeScreen();
+        SharedPreferences prefs =getSharedPreferences("app_data",MODE_PRIVATE);
+        boolean launched = prefs.getBoolean("launched",false);
+
+        if (launched==false)
+        {
+            SharedPreferences.Editor editor=prefs.edit();
+            editor.putBoolean("launched",true);
+            editor.commit();
+        }else
+        {
+            launchHomeScreen();
             finish();
         }
 
@@ -66,6 +78,7 @@ public class IntroActivity extends AppCompatActivity {
                     mViewPager.setCurrentItem(current);
                 } else {
                     launchHomeScreen();
+                    finish();
                 }
             }
         });

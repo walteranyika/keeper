@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.keeper.keeper.models.Category;
+import com.keeper.keeper.models.Contact;
 import com.keeper.keeper.models.Product;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class ProductsDb extends SQLiteOpenHelper {
 
     //create a database called demo_database.db
     public ProductsDb(Context application_context) {
-        super(application_context, "products.db", null, 5);
+        super(application_context, "products.db", null, 1);
     }
 
     //Creates Table
@@ -31,7 +32,8 @@ public class ProductsDb extends SQLiteOpenHelper {
         database.execSQL(query);
         String query2 = "CREATE TABLE IF NOT EXISTS categories(id INTEGER PRIMARY KEY, category TEXT UNIQUE NOT NULL, color INTEGER NOT NULL,UNIQUE(category) ON CONFLICT IGNORE)";
         database.execSQL(query2);
-
+        String query3="CREATE TABLE IF NOT EXISTS contacts(id INTEGER PRIMARY KEY, names TEXT, phone TEXT UNIQUE NOT NULL, email TEXT , contact_type TEXT,UNIQUE(phone) ON CONFLICT IGNORE)";
+        database.execSQL(query3);
     }
 
     @Override
@@ -43,6 +45,11 @@ public class ProductsDb extends SQLiteOpenHelper {
         String sql_2 ="DROP TABLE IF EXISTS categories";
         database.execSQL(sql_2);
         database.execSQL("CREATE TABLE IF NOT EXISTS categories(id INTEGER PRIMARY KEY, category TEXT UNIQUE NOT NULL,color INTEGER NOT NULL, UNIQUE(category) ON CONFLICT IGNORE)");
+
+        String sql_3 ="DROP TABLE IF EXISTS contacts";
+        database.execSQL(sql_3);
+        database.execSQL("CREATE TABLE IF NOT EXISTS contacts(id INTEGER PRIMARY KEY, names TEXT, phone TEXT UNIQUE NOT NULL, email TEXT , contact_type TEXT,UNIQUE(phone) ON CONFLICT IGNORE)");
+
         onCreate(database);
     }
 
@@ -69,6 +76,22 @@ public class ProductsDb extends SQLiteOpenHelper {
             database.close();
         }
     }
+
+    /**
+     * Saves a new Contact into the db
+     */
+   public void saveContact(Contact contact){
+
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("names", capitalizeText(contact.getName()));
+        values.put("phone", contact.getTelephone());
+        values.put("email", contact.getEmail());
+        values.put("contact_type", contact.getType());
+        database.insert("contacts", null, values);
+        database.close();
+
+}
 
     /**
      * Inserts User into SQLite DB
@@ -145,6 +168,27 @@ public class ProductsDb extends SQLiteOpenHelper {
         database.close();
         return product;
     }
+
+    /**
+     * Get a list of Contacts from the database
+     */
+    public ArrayList<Contact> getContacts() {
+        ArrayList<Contact> data;
+        data = new ArrayList<>();
+        String selectQuery = "SELECT  * from contacts";
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Contact person = new Contact(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4));
+                data.add(person);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        database.close();
+        return data;
+    }
+
     /**
      * Get Count of  Number of  SQLite records
      *

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void quotesBtn(View view) {
-        Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, QuotesOrdersActivity.class));
     }
 
     public void solidBtn(View view) {
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addressBtn(View view) {
-        Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, AddressBookActivity.class));
     }
 
     public void settingsBtn(View view) {

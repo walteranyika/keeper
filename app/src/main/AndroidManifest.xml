@@ -19,7 +19,6 @@
         <activity
             android:name=".SplashActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
-
         </activity>
         <activity android:name=".SalesActivity">
         </activity>
@@ -48,12 +47,24 @@
             android:label="@string/title_activity_reports"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".IntroActivity" android:theme="@style/IntroTheme">
+        <activity
+            android:name=".IntroActivity"
+            android:theme="@style/IntroTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".AddressBookActivity"
+            android:label="Contacts"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".QuotesOrdersActivity"
+            android:label="Quotes and Orders"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
