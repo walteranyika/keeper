@@ -12,8 +12,7 @@ import com.keeper.keeper.fragments.ReceiptDialogFragment;
 import com.keeper.keeper.fragments.ReceiptFragment;
 import com.keeper.keeper.fragments.SalesFragment;
 
-public class SalesActivity extends AppCompatActivity implements SalesFragment.OnShoppingBasketSelectedListener,
-        ReceiptDialogFragment.ItemQuantityChangedListener{
+public class SalesActivity extends AppCompatActivity implements SalesFragment.OnShoppingBasketSelectedListener, ReceiptDialogFragment.ItemQuantityChangedListener{
 
     public static final String SALES_FRAGMENT = "sales_fragment";
     public static final String RECEIPT_FRAGMENT = "receipt_fragment";

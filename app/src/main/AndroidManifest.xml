@@ -66,6 +66,26 @@
             android:label="Quotes and Orders"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".SolidActivity"
+            android:label="Solid">
+        </activity>
+        <activity
+            android:name=".AddQuoteOrOrderActivity"
+            android:label="Add Quote or Order">
+        </activity>
+        <activity
+            android:name=".ConfirmActivity"
+            android:label="Confirm">
+        </activity>
+        <activity
+            android:name=".TutorialsActivity"
+            android:theme="@style/IntroTheme">
+        </activity>
+        <activity
+            android:label="Settings"
+            android:name=".SettingsActivity">
+        </activity>
     </application>
 
 </manifest>

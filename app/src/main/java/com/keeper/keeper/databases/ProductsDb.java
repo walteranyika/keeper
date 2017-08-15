@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.keeper.keeper.models.Category;
 import com.keeper.keeper.models.Contact;
+import com.keeper.keeper.models.Order;
 import com.keeper.keeper.models.Product;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class ProductsDb extends SQLiteOpenHelper {
 
     //create a database called demo_database.db
     public ProductsDb(Context application_context) {
-        super(application_context, "products.db", null, 1);
+        super(application_context, "products.db", null, 2);
     }
 
     //Creates Table
@@ -34,6 +35,19 @@ public class ProductsDb extends SQLiteOpenHelper {
         database.execSQL(query2);
         String query3="CREATE TABLE IF NOT EXISTS contacts(id INTEGER PRIMARY KEY, names TEXT, phone TEXT UNIQUE NOT NULL, email TEXT , contact_type TEXT,UNIQUE(phone) ON CONFLICT IGNORE)";
         database.execSQL(query3);
+
+        String  query4 ="CREATE TABLE IF NOT EXISTS quotes_orders" +
+                "(id INTEGER PRIMARY KEY, " +
+                "ref_number TEXT, " +
+                "product_name TEXT, " +
+                "unit_price REAL, " +
+                "quantity INTEGER, " +
+                "total INTEGER, " +
+                "date_added real, " +
+                "trans_type TEXT, " +
+                "phone TEXT, " +
+                "email TEXT)";
+        database.execSQL(query4);
     }
 
     @Override
@@ -50,8 +64,29 @@ public class ProductsDb extends SQLiteOpenHelper {
         database.execSQL(sql_3);
         database.execSQL("CREATE TABLE IF NOT EXISTS contacts(id INTEGER PRIMARY KEY, names TEXT, phone TEXT UNIQUE NOT NULL, email TEXT , contact_type TEXT,UNIQUE(phone) ON CONFLICT IGNORE)");
 
+
+        database.execSQL("DROP TABLE IF EXISTS quotes_orders");
+
+        String  query4 ="CREATE TABLE IF NOT EXISTS quotes_orders" +
+                        "(id INTEGER PRIMARY KEY, " +
+                        "ref_number TEXT, " +
+                        "product_name TEXT, " +
+                        "unit_price REAL, " +
+                        "quantity INTEGER, " +
+                        "total INTEGER, " +
+                        "date_added real, " +
+                        "trans_type TEXT, " +
+                        "phone TEXT, " +
+                        "email TEXT)";
+        database.execSQL(query4);
         onCreate(database);
     }
+
+    /**
+     * Inserts a new Quote or Order into the db
+     */
+
+
 
     /**
      * Inserts User into SQLite DB
@@ -347,7 +382,9 @@ public class ProductsDb extends SQLiteOpenHelper {
         return data;
     }
 
-    public int getCategoryId(String category){
+
+    public int getCategoryId(String category)
+    {
         String selectQuery = "SELECT  id FROM categories WHERE category='"+category+"'";
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);

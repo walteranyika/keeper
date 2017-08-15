@@ -12,6 +12,7 @@ public class Product {
     private String description;
     private String category;
     private int color;
+    private int fakeQuantity;
 
     public int getColor() {
         return color;
@@ -27,6 +28,7 @@ public class Product {
         this.title = title;
         this.price = price;
         this.quantity = quantity;
+        this.fakeQuantity=0;
     }
 
     public Product(int code, String title, double price, int quantity, String description, String category) {
@@ -37,6 +39,7 @@ public class Product {
         this.quantity = quantity;
         this.description = description;
         this.category = category;
+        this.fakeQuantity=0;
     }
 
     public Product(int code, String title, double price, int quantity, String description, String category, int color) {
@@ -47,6 +50,15 @@ public class Product {
         this.description = description;
         this.category = category;
         this.color = color;
+        this.fakeQuantity=0;
+    }
+
+    public int getFakeQuantity() {
+        return fakeQuantity;
+    }
+
+    public void setFakeQuantity(int fakeQuantity) {
+        this.fakeQuantity = fakeQuantity;
     }
 
     public String getDescription() {

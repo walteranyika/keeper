@@ -19,13 +19,18 @@
             android:textSize="20sp"
             android:layout_marginBottom="2dp"
             android:text="Soap"/>
-
         <TextView
             android:textSize="8dp"
             android:id="@+id/itemCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="10001"/>
+        <TextView
+            android:textColor="#ff4b4b"
+            android:textSize="8dp"
+            android:id="@+id/itemQty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <TextView

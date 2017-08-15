@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-
 import com.keeper.keeper.R;
+import com.keeper.keeper.models.Order;
 import com.keeper.keeper.models.Product;
 
 import java.util.ArrayList;
@@ -19,18 +19,20 @@ import java.util.ArrayList;
  * Created by walter on 7/9/17.
  */
 
-public class SalesListAdapter extends BaseAdapter {
+public class OrdersListAdapter extends BaseAdapter {
 
 
     Context mContext;
-    ArrayList<Product> temporaryArray;
-    ArrayList<Product> permanentArray;
+    ArrayList<Order> temporaryArray;
+    ArrayList<Order> permanentArray;
+    String type;
 
-    public SalesListAdapter(Context context, ArrayList<Product> data) {
+    public OrdersListAdapter(Context context, ArrayList<Order> data,String type) {
         this.mContext = context;
         this.temporaryArray = data;
         this.permanentArray=new ArrayList<>();
         this.permanentArray.addAll(data);
+        this.type=type;
     }
 
     @Override
@@ -53,30 +55,28 @@ public class SalesListAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
-            convertView = inflater.inflate(R.layout.sales_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.orders_list_item_layout, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.titleTextView = (TextView) convertView.findViewById(R.id.itemTitle);
-            viewHolder.priceTextView = (TextView) convertView.findViewById(R.id.itemPrice);
-            viewHolder.codeTextView = (TextView) convertView.findViewById(R.id.itemCode);
-            viewHolder.qtyTextView = (TextView) convertView.findViewById(R.id.itemQty);
+            viewHolder.orderItemTitle = (TextView) convertView.findViewById(R.id.orderItemTitle);
+            viewHolder.orderItemDate = (TextView) convertView.findViewById(R.id.orderItemDate);
+            viewHolder.orderItemTotal = (TextView) convertView.findViewById(R.id.orderItemTotal);
+            viewHolder.orderItemNumber = (TextView) convertView.findViewById(R.id.orderItemNumber);
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        final Product product = temporaryArray.get(position);
-        viewHolder.titleTextView.setText(product.getTitle());
-        viewHolder.priceTextView.setText("" + product.getPrice());
-        viewHolder.codeTextView.setText("" + product.getCode());
-        int qty =product.getFakeQuantity();
-        if (qty>0) {
-            viewHolder.qtyTextView.setText("x " + qty);
-        }
+        final Order order = temporaryArray.get(position);
+        viewHolder.orderItemTitle.setText(order.getClient());
+        viewHolder.orderItemDate.setText(order.getDate());
+        viewHolder.orderItemTotal.setText("" + order.getTotal());
+        viewHolder.orderItemNumber.setText(type+" #"+order.getId() );
+
         return convertView;
     }
 
     public void filter(String text){
-        text=text.toLowerCase();
+        /*text=text.toLowerCase();
         temporaryArray.clear();
 
         if(text.trim().length()==0)
@@ -95,14 +95,14 @@ public class SalesListAdapter extends BaseAdapter {
             }
             Log.d("SEARCH","COUNT "+temporaryArray.size());
         }
-        notifyDataSetChanged();
+        notifyDataSetChanged();*/
     }
 
     static class ViewHolder {
-        TextView titleTextView;
-        TextView codeTextView;
-        TextView priceTextView;
-        TextView qtyTextView;
+        TextView orderItemTitle;
+        TextView orderItemTotal;
+        TextView orderItemDate;
+        TextView orderItemNumber;
     }
 }
 

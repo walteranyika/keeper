@@ -11,15 +11,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.keeper.keeper.models.Order;
 import com.keeper.keeper.models.Product;
+import com.keeper.keeper.utils.CalendarUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class TemporaryDb extends SQLiteOpenHelper {
+public class QuotesandOrdersDb extends SQLiteOpenHelper {
+
+    private static final String TAG ="ORDERS" ;
 
     //create a database called demo_database.db
-    public TemporaryDb(Context applicationcontext) {
-        super(applicationcontext, "tempo.db", null, 2);
+    public QuotesandOrdersDb(Context applicationcontext) {
+        super(applicationcontext, "quotes_and_orders.db", null, 3);
     }
 
     //Creates Table
@@ -27,17 +32,52 @@ public class TemporaryDb extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         String query = "CREATE TABLE IF NOT EXISTS temporary(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER)";
         database.execSQL(query);
+        String query1 = "CREATE TABLE IF NOT EXISTS orders(id INTEGER PRIMARY KEY, client TEXT,type TEXT, date REAL)";
+        database.execSQL(query1);
+        String query2 = "CREATE TABLE IF NOT EXISTS order_details(order_id INTEGER, title TEXT, code INTEGER, price REAL, quantity INTEGER,total INTEGER)";
+        database.execSQL(query2);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int version_old, int current_version) {
-        String sql;
-        sql = "DROP TABLE IF EXISTS temporary";
-        database.execSQL(sql);
+        database.execSQL("DROP TABLE IF EXISTS temporary");
+        database.execSQL("DROP TABLE IF EXISTS orders");
+        database.execSQL("DROP TABLE IF EXISTS order_details");
+        //create fresh dbs
         database.execSQL("CREATE TABLE IF NOT EXISTS temporary(id INTEGER PRIMARY KEY, title TEXT, code INTEGER, price REAL, quantity INTEGER)");
+        String query1 = "CREATE TABLE IF NOT EXISTS orders(id INTEGER PRIMARY KEY, client TEXT, type TEXT,  date REAL)";
+        database.execSQL(query1);
+        String query2 = "CREATE TABLE IF NOT EXISTS order_details(order_id INTEGER, title TEXT, code INTEGER, price REAL, quantity INTEGER,total INTEGER)";
+        database.execSQL(query2);
         onCreate(database);
     }
 
+    /**
+     * Inserts User into SQLite DB
+     */
+    public void saveNewOrder(String type,String client,List<Product>products) {
+
+            SQLiteDatabase database = this.getWritableDatabase();
+            ContentValues order = new ContentValues();
+            order.put("client",client);
+            order.put("type",type);
+            order.put("date",System.currentTimeMillis());
+            int id=(int)database.insert("orders", null, order);
+            Log.d("ORDERS", "order id: "+id);
+            for (Product product:products)
+            {
+                ContentValues values = new ContentValues();
+                values.put("order_id", id);
+                values.put("title", product.getTitle());
+                values.put("code", product.getCode());
+                values.put("price", product.getPrice());
+                values.put("total", product.getPrice()*product.getQuantity());
+                values.put("quantity", product.getQuantity());
+                database.insert("order_details", null, values);
+            }
+            database.close();
+
+    }
     /**
      * Inserts User into SQLite DB
      */
@@ -79,6 +119,29 @@ public class TemporaryDb extends SQLiteOpenHelper {
         }
         database.close();
         return data;
+    }
+
+    /**
+     * Get Order summary from the database
+     */
+    public ArrayList<Order> getOrdersSummary(String type)
+    {
+        ArrayList<Order> orders=new ArrayList<>();
+        String sql = "select orders.id, orders.client, orders.type, SUM(order_details.total), orders.date FROM orders JOIN order_details ON orders.id=order_details.order_id WHERE orders.type='"+type+"' GROUP BY order_details.order_id";
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(sql, null);
+        if (cursor.moveToFirst()){
+            do
+            {
+                Log.d(TAG, "ID   "+cursor.getInt(0));
+                Log.d(TAG, "TOTAL"+cursor.getInt(3));
+                Log.d(TAG, "DATE "+ CalendarUtils.ConvertToDateString(cursor.getLong(4)));
+                Log.d(TAG, "------------------------");
+                Order order =new Order(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getDouble(3),CalendarUtils.ConvertToPureDateString(cursor.getLong(4)));
+                orders.add(order);
+            }while (cursor.moveToNext());
+        }
+        return orders;
     }
 
 

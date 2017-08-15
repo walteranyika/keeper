@@ -48,11 +48,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void solidBtn(View view) {
-        Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, SolidActivity.class));
     }
 
     public void tutorialsBtn(View view) {
-        Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, TutorialsActivity.class));
     }
 
     public void addressBtn(View view) {
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void settingsBtn(View view) {
-        Toast.makeText(this, "Coming Soon", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 
     private void exportDB(String db) {

@@ -55,6 +55,7 @@ public class SalesFragment extends Fragment {
 
         tvSalesCounter.setText(temporaryDb.countItems()+" Items");
         tvSalesTotal.setText("KES "+temporaryDb.getProductsTotalCost());
+
         final ArrayList<Product> data = new ProductsDb(getActivity()).getProducts();
         adapter = new SalesListAdapter(getActivity(), data);
         listView.setAdapter(adapter);
